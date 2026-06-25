@@ -3,18 +3,20 @@ import 'package:flutter/material.dart';
 class Podcasts extends StatelessWidget {
   const Podcasts({super.key});
 
+  static const _lastPodcastImage = 'https://i.scdn.co/image/ab6765630000ba8a6adf65169a7d65f425e5db7a';
+
   static const _items = [
-    ('Rotten Mango', 'https://i.scdn.co/image/ab6765630000ba8a0c1a30f68eb8b38e1fd9a413'),
-    ('Last Podcast On\nThe Left', 'https://i.scdn.co/image/ab6765630000ba8a6adf65169a7d65f425e5db7a'),
+    ('Rotten Mango', _lastPodcastImage),
+    ('Last Podcast On\nThe Left', _lastPodcastImage),
     ('More in\nTrue crime', ''),
-    ('The Joe Rogan\nExperience', 'https://i.scdn.co/image/ab6765630000ba8a0a3d34a7e02b5f9706eab759'),
-    ('Gee Thanks', 'https://i.scdn.co/image/ab6765630000ba8a12dc0498859ca6b3f8dbf4f9'),
+    ('The Joe Rogan\nExperience', _lastPodcastImage),
+    ('Gee Thanks', _lastPodcastImage),
     ('More in\nComedy', ''),
-    ('Distractible', 'https://i.scdn.co/image/ab6765630000ba8abc42fc28a745c2a1f0d43fd5'),
-    ('My Brother, My\nBrother And Me', 'https://i.scdn.co/image/ab6765630000ba8ad21ec3c5e821b758f09961af'),
+    ('Distractible', _lastPodcastImage),
+    ('My Brother, My\nBrother And Me', _lastPodcastImage),
     ('More in Stories', ''),
-    ('Call Her Daddy', 'https://i.scdn.co/image/ab6765630000ba8a4d915b5364f47c42a6e2e956'),
-    ('Relationships', 'https://i.scdn.co/image/ab6765630000ba8ad59c20c3526c3038f37f3896'),
+    ('Call Her Daddy', _lastPodcastImage),
+    ('Relationships', _lastPodcastImage),
     ('More in\nRelationships', ''),
   ];
 
@@ -78,8 +80,8 @@ class Podcasts extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: isMore ? _moreColor(index) : Colors.grey.shade900,
                                   borderRadius: BorderRadius.circular(6),
-                                  image: isMore ? null : DecorationImage(image: NetworkImage(item.$2), fit: BoxFit.cover),
                                 ),
+                                clipBehavior: Clip.hardEdge,
                                 child: isMore
                                     ? Center(
                                         child: Text(
@@ -88,7 +90,11 @@ class Podcasts extends StatelessWidget {
                                           style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.w800),
                                         ),
                                       )
-                                    : null,
+                                    : Image.network(
+                                        item.$2,
+                                        fit: BoxFit.cover,
+                                        errorBuilder: (_, __, ___) => const _PodcastFallback(),
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 6),
@@ -111,10 +117,21 @@ class Podcasts extends StatelessWidget {
               alignment: Alignment.bottomCenter,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 20),
-                child: ElevatedButton(
-                  onPressed: () => Navigator.pushNamed(context, '/search'),
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, minimumSize: const Size(92, 42)),
-                  child: const Text('Done', style: TextStyle(fontWeight: FontWeight.w800)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, '/artistas'),
+                      style: ElevatedButton.styleFrom(backgroundColor: const Color(0xFF2A2A2A), foregroundColor: Colors.white, minimumSize: const Size(92, 42)),
+                      child: const Text('Artists', style: TextStyle(fontWeight: FontWeight.w800)),
+                    ),
+                    const SizedBox(width: 12),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pushNamed(context, '/search'),
+                      style: ElevatedButton.styleFrom(backgroundColor: Colors.white, foregroundColor: Colors.black, minimumSize: const Size(92, 42)),
+                      child: const Text('Done', style: TextStyle(fontWeight: FontWeight.w800)),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -127,5 +144,20 @@ class Podcasts extends StatelessWidget {
   Color _moreColor(int index) {
     const colors = [Color(0xFFD33167), Color(0xFF8E130C), Color(0xFF073D1D), Color(0xFF243B75)];
     return colors[(index ~/ 3) % colors.length];
+  }
+}
+
+
+class _PodcastFallback extends StatelessWidget {
+  const _PodcastFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: const Color(0xFF2A2A2A),
+      child: const Center(
+        child: Icon(Icons.podcasts, color: Colors.white70, size: 32),
+      ),
+    );
   }
 }

@@ -18,7 +18,7 @@ class PlayerPage extends StatelessWidget {
             children: [
               Row(children: [const Icon(Icons.keyboard_arrow_down, color: Colors.white), const Spacer(), const Text('1(Remastered)', style: TextStyle(color: Colors.white, fontSize: 12, fontWeight: FontWeight.w800)), const Spacer(), const Icon(Icons.more_horiz, color: Colors.white)]),
               const SizedBox(height: 56),
-              Image.network(beatlesCover, height: 340, width: 340, fit: BoxFit.cover),
+              Image.network(beatlesCover, height: 340, width: 340, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const _PlayerCoverFallback()),
               const SizedBox(height: 58),
               Row(children: const [Expanded(child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [Text('From Me to You - Mono / Remast', overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.w800)), SizedBox(height: 4), Text('The Beatles', style: TextStyle(color: Colors.white70, fontSize: 14))])), Icon(Icons.favorite_border, color: Colors.white)]),
               const SizedBox(height: 20),
@@ -33,6 +33,23 @@ class PlayerPage extends StatelessWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+
+class _PlayerCoverFallback extends StatelessWidget {
+  const _PlayerCoverFallback();
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 340,
+      width: 340,
+      color: const Color(0xFFC93E31),
+      child: const Center(
+        child: Text('1', style: TextStyle(color: Color(0xFFFFE66D), fontSize: 150, fontWeight: FontWeight.w800)),
       ),
     );
   }

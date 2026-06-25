@@ -4,13 +4,13 @@ class SearchPage extends StatelessWidget {
   const SearchPage({super.key});
 
   static const _items = [
-    ('FKA twigs', 'Artist', 'https://i.scdn.co/image/ab6761610000e5eb8048bc6f1f45a8f15a1d39f9'),
-    ('Hozier', 'Artist', 'https://i.scdn.co/image/ab6761610000e5ebad85a585103dfc2f3439119a'),
-    ('Grimes', 'Artist', 'https://i.scdn.co/image/ab6761610000e5ebd6dce4989819eb8d92a28b14'),
-    ('1(Remastered)', 'Album • The Beatles', 'https://i.scdn.co/image/ab67616d00001e02c29b82189dc2f0ddacbf98f3'),
-    ('HAYES', 'Artist', 'https://i.scdn.co/image/ab6761610000e5eb58b3057abe9c53761229a1ef'),
-    ('Led Zeppelin', 'Artist', 'https://i.scdn.co/image/ab6761610000e5ebc15c1db7827cf39325a50d98'),
-    ('Les', 'Song • Childish Gambino', 'https://i.scdn.co/image/ab67616d00001e02b1f6a8bc400f80a5a0d5b089'),
+    ('FKA twigs', 'Artist', Icons.person),
+    ('Hozier', 'Artist', Icons.person),
+    ('Grimes', 'Artist', Icons.person),
+    ('1(Remastered)', 'Album • The Beatles', Icons.album),
+    ('HAYES', 'Artist', Icons.person),
+    ('Led Zeppelin', 'Artist', Icons.person),
+    ('Les', 'Song • Childish Gambino', Icons.music_note),
   ];
 
   @override
@@ -19,7 +19,7 @@ class SearchPage extends StatelessWidget {
       backgroundColor: const Color(0xFF121212),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.fromLTRB(18, 18, 16, 0),
+          padding: const EdgeInsets.fromLTRB(18, 18, 16, 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -27,12 +27,12 @@ class SearchPage extends StatelessWidget {
                 children: [
                   Expanded(
                     child: SizedBox(
-                      height: 34,
+                      height: 38,
                       child: TextField(
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: const Color(0xFF2A2A2A),
-                          prefixIcon: const Icon(Icons.search, color: Colors.white70, size: 17),
+                          prefixIcon: const Icon(Icons.search, color: Colors.white70, size: 20),
                           hintText: 'Search',
                           hintStyle: const TextStyle(color: Colors.white, fontSize: 13),
                           border: OutlineInputBorder(borderRadius: BorderRadius.circular(7), borderSide: BorderSide.none),
@@ -42,11 +42,17 @@ class SearchPage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  TextButton(onPressed: () {}, child: const Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 13))),
+                  TextButton(
+                    onPressed: () => Navigator.pop(context),
+                    child: const Text('Cancel', style: TextStyle(color: Colors.white, fontSize: 13)),
+                  ),
                 ],
               ),
               const SizedBox(height: 26),
-              const Text('Recent searches', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15)),
+              const Text(
+                'Recent searches',
+                style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 15),
+              ),
               const SizedBox(height: 16),
               Expanded(
                 child: ListView.separated(
@@ -58,18 +64,17 @@ class SearchPage extends StatelessWidget {
                       onTap: index == 3 ? () => Navigator.pushNamed(context, '/album') : null,
                       child: Row(
                         children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(index == 3 || index == 6 ? 0 : 22),
-                            child: Image.network(item.$3, height: 44, width: 44, fit: BoxFit.cover),
-                          ),
+                          _SearchAvatar(icon: item.$3, square: index == 3 || index == 6),
                           const SizedBox(width: 14),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(item.$1, style: const TextStyle(color: Colors.white, fontSize: 15)),
-                              const SizedBox(height: 2),
-                              Text(item.$2, style: const TextStyle(color: Colors.white70, fontSize: 12)),
-                            ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(item.$1, style: const TextStyle(color: Colors.white, fontSize: 15)),
+                                const SizedBox(height: 2),
+                                Text(item.$2, style: const TextStyle(color: Colors.white70, fontSize: 12)),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -77,10 +82,43 @@ class SearchPage extends StatelessWidget {
                   },
                 ),
               ),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () => Navigator.pushNamed(context, '/album'),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF1DB954),
+                    foregroundColor: Colors.black,
+                    minimumSize: const Size.fromHeight(44),
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  ),
+                  child: const Text('Abrir álbum', style: TextStyle(fontWeight: FontWeight.w800)),
+                ),
+              ),
             ],
           ),
         ),
       ),
+    );
+  }
+}
+
+class _SearchAvatar extends StatelessWidget {
+  const _SearchAvatar({required this.icon, required this.square});
+
+  final IconData icon;
+  final bool square;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 44,
+      width: 44,
+      decoration: BoxDecoration(
+        color: const Color(0xFF2A2A2A),
+        borderRadius: BorderRadius.circular(square ? 2 : 22),
+      ),
+      child: Icon(icon, color: Colors.white70, size: 24),
     );
   }
 }

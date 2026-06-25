@@ -24,7 +24,7 @@ class AlbumPage extends StatelessWidget {
           child: Column(
             children: [
               Align(alignment: Alignment.topLeft, child: IconButton(onPressed: () => Navigator.pop(context), icon: const Icon(Icons.chevron_left, color: Colors.white))),
-              Image.network(beatlesCover, height: 214, width: 214, fit: BoxFit.cover),
+              Image.network(beatlesCover, height: 214, width: 214, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const _CoverFallback(size: 214)),
               const SizedBox(height: 28),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -85,7 +85,7 @@ class _MiniPlayer extends StatelessWidget {
         height: 50,
         color: const Color(0xFF6C1630),
         child: Row(children: [
-          ClipRRect(borderRadius: BorderRadius.circular(4), child: Image.network(beatlesCover, width: 36, height: 36)),
+          ClipRRect(borderRadius: BorderRadius.circular(4), child: Image.network(beatlesCover, width: 36, height: 36, fit: BoxFit.cover, errorBuilder: (_, __, ___) => const _CoverFallback(size: 36))),
           const SizedBox(width: 8),
           const Expanded(child: Text('From Me to You - Mono / Remastered • The Beatles', overflow: TextOverflow.ellipsis, style: TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.w700))),
           const Icon(Icons.bluetooth, color: Color(0xFF1DB954), size: 20),
@@ -104,4 +104,23 @@ class _BottomNav extends StatelessWidget {
           Column(mainAxisAlignment: MainAxisAlignment.center, children: [Icon(Icons.library_music_outlined, color: Colors.white70, size: 20), Text('Your Library', style: TextStyle(color: Colors.white70, fontSize: 10))]),
         ]),
       );
+}
+
+
+class _CoverFallback extends StatelessWidget {
+  const _CoverFallback({required this.size});
+
+  final double size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: size,
+      width: size,
+      color: const Color(0xFFC93E31),
+      child: const Center(
+        child: Text('1', style: TextStyle(color: Color(0xFFFFE66D), fontSize: 48, fontWeight: FontWeight.w800)),
+      ),
+    );
+  }
 }
